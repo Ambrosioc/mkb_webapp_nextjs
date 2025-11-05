@@ -6,11 +6,32 @@ const nextConfig = {
         protocol: "https",
         hostname: "**",
       },
+      // Google user content for Trustmary/Google reviews
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
     ],
+    // Allow external images from any source
+    unoptimized: false,
   },
-  turbopack: {
-    // Explicitly set the project root to avoid workspace root inference warnings
-    root: __dirname,
+  // Headers pour permettre les images externes
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Referrer-Policy",
+            value: "no-referrer-when-downgrade",
+          },
+        ],
+      },
+    ];
   },
 };
 

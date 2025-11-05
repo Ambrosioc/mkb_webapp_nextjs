@@ -10,6 +10,9 @@ import HomeRevews from "@/src/components/trustmary/HomeRevews";
 export const metadata: Metadata = {
   title: "MKB-Automobile",
   description: "Tout vos vehicule au meilleure prix",
+  other: {
+    "referrer": "no-referrer-when-downgrade",
+  },
 };
 
 export default function RootLayout({

@@ -1,9 +1,11 @@
 import { lenboxConfig } from "../config/services";
 
 export const fetchData = async () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mkb-backend-node-express.vercel.app";
+  const envApiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const prodBase = "https://mkb-backend-node-express.vercel.app";
+  const primaryBase = envApiUrl && envApiUrl.trim().length > 0 ? envApiUrl : prodBase;
 
-  if (!apiUrl) {
+  if (!primaryBase) {
     console.warn("⚠️ NEXT_PUBLIC_API_URL n'est pas définie. Utilisation de l'API de production par défaut.");
   }
 
@@ -11,7 +13,7 @@ export const fetchData = async () => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 secondes
 
-    const response = await fetch(`${apiUrl}/api`, {
+    const response = await fetch(`${primaryBase}/api`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -40,8 +42,33 @@ export const fetchData = async () => {
     }
 
     if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('Failed to fetch'))) {
-      console.error("Erreur réseau lors de la récupération des données:", error);
-      throw new Error("Erreur de connexion réseau. Vérifiez que le serveur backend est accessible sur " + apiUrl);
+      console.error("Erreur réseau lors de la récupération des données (base):", primaryBase, error);
+      // Fallback automatique vers l'API de production si l'API locale est indisponible
+      if (primaryBase.includes('localhost') || primaryBase.includes('127.0.0.1')) {
+        try {
+          const controllerFallback = new AbortController();
+          const timeoutIdFallback = setTimeout(() => controllerFallback.abort(), 30000);
+          const fallbackUrl = `${prodBase}/api`;
+          const responseFallback = await fetch(fallbackUrl, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controllerFallback.signal,
+          });
+          clearTimeout(timeoutIdFallback);
+          if (!responseFallback.ok) {
+            throw new Error(`HTTP error (fallback)! Status: ${responseFallback.status}`);
+          }
+          const dataFallback = await responseFallback.json();
+          if (!Array.isArray(dataFallback)) {
+            throw new Error("Les données (fallback) ne sont pas au format JSON attendu (tableau)");
+          }
+          console.warn("⚠️ API locale indisponible. Données chargées depuis l'API de production.");
+          return dataFallback;
+        } catch (fallbackError) {
+          console.error("Échec du fallback vers l'API de production:", fallbackError);
+        }
+      }
+      throw new Error("Erreur de connexion réseau. Vérifiez que le serveur backend est accessible sur " + primaryBase);
     }
 
     console.error(

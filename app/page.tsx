@@ -136,20 +136,6 @@ export default function Home({ }) {
                 </p>
               </div>
               <div id="trustmary-widget" className="w-full min-h-[400px] flex items-center justify-center" />
-              <div className="mt-12">
-                <Button
-                  variant="orange"
-                  size="lg"
-                  className="rounded-full px-8 py-6 text-lg shadow-large hover:shadow-xl transition-all duration-300 group"
-                  onClick={() => {
-                    savePageVisitedToLocalStorage("avis-clients");
-                    router.push("/avis-clients");
-                  }}
-                >
-                  Découvrir tous les avis clients
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </div>
             </div>
           </section>
           <section className="py-32 border-t border-gray-200 bg-gradient-to-br from-white via-primary-orange-50/30 to-white relative overflow-hidden">

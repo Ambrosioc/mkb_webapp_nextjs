@@ -1,11 +1,17 @@
-import FaqAccordion from "@/src/components/FaqAccordion";
+"use client";
 import { Main } from "@/src/components/layouts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Card, CardContent } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import Link from "next/link";
+import { Badge } from "@/src/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/src/components/ui/accordion";
+import { ArrowRight, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { savePageVisitedToLocalStorage } from "@/src/components/localStorage/SaveToLocalStorage";
 import React from "react";
 
 const Faq = () => {
+  const router = useRouter();
+  
   const foqContainerFaq = [
     {
       title: "Achat du véhicule",
@@ -141,44 +147,96 @@ Prise de rendez-vous par :
       ],
     },
   ];
+
   return (
-    <Main>
-      <div className="max-w-4xl mx-auto px-6 max-md:px-4 space-y-12 animate-fade-in">
-        <div className="text-center space-y-4 py-8">
-          <h1 className="text-h1 max-sm:text-3xl">
-            Vous avez des questions ? <br />
-            <span className="text-primary-orange">On essaye d'y répondre</span>
-          </h1>
-        </div>
-
-        <div className="space-y-8">
-          {foqContainerFaq.map((item, index) => (
-            <Card key={index} className="shadow-soft">
-              <CardHeader>
-                <CardTitle className="text-h3 text-primary-orange">{item.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <FaqAccordion data={item.data} />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <Card className="bg-gradient-to-br from-primary-orange-50 to-white border-primary-orange-100 shadow-medium">
-          <CardContent className="pt-6 pb-8 text-center space-y-6">
-            <div className="space-y-2">
-              <h2 className="text-h2">Vous n'avez pas trouvé la réponse que vous cherchiez ?</h2>
-              <p className="text-body-lg text-grey">
-                Notre équipe est là pour vous aider
-              </p>
+    <>
+      {/* Background with full width */}
+      <section className="w-full bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:48px_48px]" />
+        {/* Content container with max-width */}
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-16 py-32 relative z-10">
+          <div className="flex flex-col w-full items-center space-y-12">
+          {/* Header Section - Same as home page */}
+          <div className="text-center space-y-6 max-w-3xl">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <MessageCircle className="w-6 h-6 text-primary-orange" />
+              <Badge variant="outline" className="border-primary-orange/50 bg-primary-orange/10 text-primary-orange px-4 py-1.5">
+                FAQ
+              </Badge>
+              <MessageCircle className="w-6 h-6 text-primary-orange" />
             </div>
-            <Button asChild variant="orange" size="lg">
-              <Link href="/contact">Nous contacter</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    </Main>
+            <h2 className="text-h1">
+              Vous avez des questions ?{" "}
+              <span className="text-primary-orange bg-gradient-to-r from-primary-orange to-orange-600 bg-clip-text text-transparent">
+                On essaie d'y répondre
+              </span>
+            </h2>
+            <p className="text-body-lg text-grey">
+              Trouvez rapidement les réponses aux questions les plus fréquentes
+            </p>
+          </div>
+
+          {/* FAQ Categories */}
+          <div className="w-full space-y-8">
+            {foqContainerFaq.map((category, categoryIndex) => (
+              <Card key={categoryIndex} className="border-0 shadow-large bg-white/90 backdrop-blur-sm">
+                <CardContent className="p-8">
+                  <div className="mb-6">
+                    <h3 className="text-h2 font-bold text-primary-orange mb-2">
+                      {category.title}
+                    </h3>
+                    <div className="w-16 h-1 bg-gradient-to-r from-primary-orange to-orange-600 rounded-full"></div>
+                  </div>
+                  <Accordion type="single" collapsible className="w-full">
+                    {category.data.map((faq, index) => (
+                      <AccordionItem 
+                        key={index} 
+                        value={`category-${categoryIndex}-item-${index}`} 
+                        className="border-b border-gray-200 last:border-0"
+                      >
+                        <AccordionTrigger className="text-left text-h4 hover:no-underline py-6 hover:text-primary-orange transition-colors">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-body text-grey leading-relaxed pb-6">
+                          <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Contact Section */}
+          <Card className="w-full border-0 shadow-xl bg-gradient-to-br from-primary-orange-50 via-white to-primary-orange-50">
+            <CardContent className="p-12 text-center space-y-8">
+              <div className="space-y-4">
+                <h2 className="text-h2">
+                  Vous n'avez pas trouvé la réponse que vous cherchiez ?
+                </h2>
+                <p className="text-body-lg text-grey max-w-2xl mx-auto">
+                  Notre équipe est là pour vous aider. Contactez-nous et nous vous répondrons dans les plus brefs délais.
+                </p>
+              </div>
+              <Button
+                variant="orange"
+                size="lg"
+                className="rounded-full px-8 py-6 text-lg shadow-large hover:shadow-xl transition-all duration-300 group"
+                onClick={() => {
+                  savePageVisitedToLocalStorage("contact");
+                  router.push("/contact");
+                }}
+              >
+                Nous contacter
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </CardContent>
+          </Card>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 
