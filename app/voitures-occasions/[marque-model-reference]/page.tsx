@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { useState } from "react";
 import "./productPage.css";
 import { Main } from "@/src/components/layouts";
 import {
@@ -17,9 +17,9 @@ import SocialNetwork from "@/src/components/socialNetwork/SocialNetwork";
 import { cardDetailsServicesMkb } from "@/src/constants";
 
 interface PageProps {
-  params: Promise<{
+  params: {
     "marque-model-reference": string;
-  }>;
+  };
 }
 
 type ElementId = "critere" | "description";
@@ -28,15 +28,12 @@ export default function Page({ params }: PageProps) {
   const { data, isLoading } = useCarContext();
   const [activeElement, setActiveElement] = useState<ElementId>("critere");
   
-  // Unwrap params Promise using React.use()
-  const unwrappedParams = use(params);
-
   const car = data?.find((item) => {
     const { marque, modele, reference } = item;
     const newModel = modele.replace(/\s/g, "-").toLocaleLowerCase();
     const newMarque = marque.replace(/\s/g, "-").toLocaleLowerCase();
     const id = `${newMarque}-${newModel}-${reference}`;
-    return id === unwrappedParams["marque-model-reference"];
+    return id === params["marque-model-reference"];
   });
 
   const date = car?.datemes ? new Date(car.datemes) : undefined;
