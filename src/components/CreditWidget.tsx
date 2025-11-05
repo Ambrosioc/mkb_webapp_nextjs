@@ -10,7 +10,8 @@ import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
 import { Alert, AlertDescription } from "./ui/alert";
 import { submitLoanApplication } from "../services";
-import { lenboxConfig } from "../config/services";
+// Les clés Lenbox sont maintenant gérées côté serveur via /api/lenbox
+// Plus besoin d'importer lenboxConfig
 import { Calculator, Euro, Clock, TrendingUp, CheckCircle2, Sparkles, Loader2 } from "lucide-react";
 
 interface LoanResponse {
@@ -47,9 +48,9 @@ const CreditWidget = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Les clés secrètes sont maintenant gérées côté serveur via /api/lenbox
+    // On envoie uniquement les données du formulaire
     const data = {
-      authkey: lenboxConfig.authKey,
-      vd: lenboxConfig.clientKey,
       montant: loanAmount,
       apport: apport,
       duree: loanDuration,
@@ -60,7 +61,8 @@ const CreditWidget = () => {
       const responseData = await submitLoanApplication(data);
       setResponse(responseData);
     } catch (error) {
-      console.log(error);
+      console.error("Erreur lors de la soumission:", error);
+      // Vous pouvez ajouter ici une notification d'erreur pour l'utilisateur
     } finally {
       setIsLoading(false);
     }

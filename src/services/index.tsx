@@ -1,4 +1,5 @@
-import { lenboxConfig } from "../config/services";
+// Les clés Lenbox sont maintenant gérées côté serveur via /api/lenbox
+// import { lenboxConfig } from "../config/services"; // Plus nécessaire
 
 export const fetchData = async () => {
   const envApiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -79,9 +80,13 @@ export const fetchData = async () => {
   }
 };
 
-export const submitLoanApplication = async (data: any) => {
+/**
+ * Soumet une demande de crédit via l'API route sécurisée
+ * Les clés secrètes Lenbox sont gérées côté serveur et ne sont jamais exposées au client
+ */
+export const submitLoanApplication = async (data: { montant: number; apport: number; duree: number; marque?: string }) => {
   try {
-    const response = await fetch(lenboxConfig.apiCreditUrl!, {
+    const response = await fetch('/api/lenbox', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,11 +95,14 @@ export const submitLoanApplication = async (data: any) => {
     });
 
     if (!response.ok) {
-      throw new Error("Échec de la requête POST vers Finnocar");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || "Échec de la requête vers l'API Lenbox");
     }
+
     const responseData = await response.json();
-    return responseData.response;
-  } catch (error) {
-    console.log(error);
+    return responseData.data; // Retourne directement les données de réponse
+  } catch (error: any) {
+    console.error("Erreur lors de la soumission de la demande de crédit:", error);
+    throw error;
   }
 };
