@@ -2,7 +2,7 @@ import { lenboxConfig } from "../config/services";
 
 export const fetchData = async () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mkb-backend-node-express.vercel.app";
-  
+
   if (!apiUrl) {
     console.warn("⚠️ NEXT_PUBLIC_API_URL n'est pas définie. Utilisation de l'API de production par défaut.");
   }
@@ -38,7 +38,7 @@ export const fetchData = async () => {
       console.error("Timeout lors de la récupération des données:", error);
       throw new Error("La requête a pris trop de temps. Veuillez réessayer plus tard.");
     }
-    
+
     if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('Failed to fetch'))) {
       console.error("Erreur réseau lors de la récupération des données:", error);
       throw new Error("Erreur de connexion réseau. Vérifiez que le serveur backend est accessible sur " + apiUrl);
