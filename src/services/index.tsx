@@ -1,10 +1,10 @@
 import { lenboxConfig } from "../config/services";
 
 export const fetchData = async () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mkb-backend-node-express.vercel.app";
   
   if (!apiUrl) {
-    console.warn("⚠️ NEXT_PUBLIC_API_URL n'est pas définie. Utilisation de http://localhost:4000 par défaut.");
+    console.warn("⚠️ NEXT_PUBLIC_API_URL n'est pas définie. Utilisation de l'API de production par défaut.");
   }
 
   try {
