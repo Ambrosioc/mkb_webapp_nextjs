@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
@@ -9,6 +9,22 @@ import { ArrowRight, Shield, CheckCircle2, Zap } from "lucide-react";
 
 const Hero = () => {
   const router = useRouter();
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    // Vérifier la taille d'écran au montage et lors du redimensionnement
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024); // lg breakpoint
+    };
+
+    // Vérifier au montage
+    checkScreenSize();
+
+    // Écouter les changements de taille
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
   return (
     <section className="relative w-full pt-32 pb-32 overflow-hidden">
       {/* Full-bleed background layer */}
@@ -94,19 +110,22 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="hero__image-container relative hidden lg:block xl:flex xl:justify-end xl:items-center">
-          <div className="hero__image relative w-full max-w-full h-[500px] lg:h-[600px] xl:h-[650px] 2xl:h-[700px] animate-fade-in">
-            <div className="absolute inset-0 bg-gradient-to-t from-primary-orange/20 to-transparent rounded-3xl blur-2xl" />
-            <Image
-              src="/audi-a3-sportback-35-tfsi-150-s-tronic-7-neuf-2022-fleury-les-aubrais-1.png"
-              alt="hero"
-              fill
-              className="object-contain relative z-10 drop-shadow-2xl"
-              priority
-              sizes="(max-width: 1024px) 0vw, (max-width: 1280px) 50vw, 600px"
-            />
+        {/* Image container - Only rendered on desktop (≥1024px) */}
+        {isDesktop && (
+          <div className="hero__image-container relative hidden lg:block xl:flex xl:justify-end xl:items-center">
+            <div className="hero__image relative w-full max-w-full h-[500px] lg:h-[600px] xl:h-[650px] 2xl:h-[700px] animate-fade-in">
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-orange/20 to-transparent rounded-3xl blur-2xl" />
+              <Image
+                src="/audi-a3-sportback-35-tfsi-150-s-tronic-7-neuf-2022-fleury-les-aubrais-1.png"
+                alt="hero"
+                fill
+                className="object-contain relative z-10 drop-shadow-2xl"
+                priority
+                sizes="(max-width: 1280px) 50vw, 600px"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
