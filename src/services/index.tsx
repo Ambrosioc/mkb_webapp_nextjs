@@ -41,7 +41,7 @@ export const fetchData = async () => {
       console.error("Timeout lors de la récupération des données:", error);
       throw new Error("La requête a pris trop de temps. Veuillez réessayer plus tard.");
     }
-
+    
     if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('Failed to fetch'))) {
       console.error("Erreur réseau lors de la récupération des données (base):", primaryBase, error);
       // Fallback automatique vers l'API de production si l'API locale est indisponible

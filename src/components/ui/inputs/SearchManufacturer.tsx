@@ -57,32 +57,32 @@ const SearchManufacturer = ({
                 </div>
               ) : (
                 filteredManufacturers.map((item: string) => (
-                  <Combobox.Option
-                    key={item}
+                <Combobox.Option
+                  key={item}
                     value={item}
-                    className={({
-                      active,
-                    }) => `relative search-manufacturer__option ${
-                      active ? "bg-primary-orange text-white" : "text-gray-900"
+                  className={({
+                    active,
+                  }) => `relative search-manufacturer__option ${
+                    active ? "bg-primary-orange text-white" : "text-gray-900"
                     }`}
-                  >
+                >
                     {({ selected }) => (
-                      <>
-                        <span
-                          className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {item}
-                        </span>
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {item}
+                      </span>
                         {selected && (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-orange">
                             ✓
                           </span>
                         )}
-                      </>
-                    )}
-                  </Combobox.Option>
+                    </>
+                  )}
+                </Combobox.Option>
                 ))
               )}
             </Combobox.Options>

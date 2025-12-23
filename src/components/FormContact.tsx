@@ -77,11 +77,11 @@ const FormContact = ({ car }: any) => {
       await new Promise((resolve) => setTimeout(resolve, 800));
       setSubmittedData(formData);
       setShowDialog(true);
-      setName("");
-      setFirstName("");
-      setEmail("");
-      setPhone("");
-      setMessage("");
+        setName("");
+        setFirstName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
     } catch (error) {
       console.error("Error submitting form:", error);
       setSubmitStatus("error");

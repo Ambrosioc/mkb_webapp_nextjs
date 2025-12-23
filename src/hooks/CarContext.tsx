@@ -36,7 +36,7 @@ export const CarContextProvider = ({
       })
       .catch((err) => {
         console.error("Erreur lors du chargement des données depuis l'API:", err);
-        setError(err.message || "Erreur lors du chargement des données");
+          setError(err.message || "Erreur lors du chargement des données");
         setIsLoading(false);
         // Ne pas planter l'application, continuer avec un tableau vide
         setData([]);

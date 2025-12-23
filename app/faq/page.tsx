@@ -174,7 +174,7 @@ Prise de rendez-vous par :
             <p className="text-body-lg text-grey">
               Trouvez rapidement les réponses aux questions les plus fréquentes
             </p>
-          </div>
+        </div>
 
           {/* FAQ Categories */}
           <div className="w-full space-y-8">
@@ -203,10 +203,10 @@ Prise de rendez-vous par :
                       </AccordionItem>
                     ))}
                   </Accordion>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
           {/* Contact Section */}
           <Card className="w-full border-0 shadow-xl bg-gradient-to-br from-primary-orange-50 via-white to-primary-orange-50">
@@ -217,8 +217,8 @@ Prise de rendez-vous par :
                 </h2>
                 <p className="text-body-lg text-grey max-w-2xl mx-auto">
                   Notre équipe est là pour vous aider. Contactez-nous et nous vous répondrons dans les plus brefs délais.
-                </p>
-              </div>
+              </p>
+            </div>
               <Button
                 variant="orange"
                 size="lg"
@@ -230,10 +230,10 @@ Prise de rendez-vous par :
               >
                 Nous contacter
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </CardContent>
-          </Card>
-          </div>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
         </div>
       </section>
     </>

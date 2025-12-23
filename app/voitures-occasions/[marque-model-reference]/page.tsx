@@ -27,7 +27,7 @@ type ElementId = "critere" | "description";
 export default function Page({ params }: PageProps) {
   const { data, isLoading } = useCarContext();
   const [activeElement, setActiveElement] = useState<ElementId>("critere");
-  
+
   const car = data?.find((item) => {
     const { marque, modele, reference } = item;
     const newModel = modele.replace(/\s/g, "-").toLocaleLowerCase();
